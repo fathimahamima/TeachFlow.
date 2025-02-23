@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { SessionProvider } from "next-auth/react";
 import { motion } from "framer-motion";
 import { signIn, signOut, useSession } from "next-auth/react";
 import * as tf from "@tensorflow/tfjs";
-import { Link } from "react-router-dom";  // ✅ Correct for React
-
+import { FaBars, FaTimes } from "react-icons/fa";
 
 import Features from "./routes/Features";
 import Feedback from "./routes/Feedback";
 import Leaderboard from "./routes/Leaderboard";
-
+import Dashboard from "./routes/components/Dashboard";
+import Courses from "./routes/components/Courses";
+import Analytics from "./routes/components/Analytics";
+import DarkModeToggle from "./routes/components/DarkModeToggle";
+import "./App.css";
 
 function HomePage({ toggleDarkMode, darkMode }) {
   const { data: session } = useSession();
@@ -23,6 +26,7 @@ function HomePage({ toggleDarkMode, darkMode }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
+        <img src="/logo.png" alt="TeachFlow Logo" width="120" />
         Welcome to TeachFlow
       </motion.h1>
       <p className="text-lg text-center mt-4 max-w-xl">
@@ -63,6 +67,7 @@ function HomePage({ toggleDarkMode, darkMode }) {
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -71,12 +76,36 @@ export default function App() {
   return (
     <SessionProvider>
       <Router>
-        <Routes>
-          <Route path="/" element={<HomePage toggleDarkMode={toggleDarkMode} darkMode={darkMode} />} />
-          <Route path="/features" element={<Features />} />
-          <Route path="/feedback" element={<Feedback />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-        </Routes>
+        <div className={`app-container ${darkMode ? "dark" : "light"}`}>
+          <header className="header">
+            <div className="logo">TeachFlow</div>
+            <button className="menu-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
+              {sidebarOpen ? <FaTimes /> : <FaBars />}
+            </button>
+            <nav className={`nav-menu ${sidebarOpen ? "open" : ""}`}>
+              <ul>
+                <li><Link to="/" onClick={() => setSidebarOpen(false)}>Home</Link></li>
+                <li><Link to="/dashboard" onClick={() => setSidebarOpen(false)}>Dashboard</Link></li>
+                <li><Link to="/courses" onClick={() => setSidebarOpen(false)}>Courses</Link></li>
+                <li><Link to="/feedback" onClick={() => setSidebarOpen(false)}>Feedback</Link></li>
+                <li><Link to="/analytics" onClick={() => setSidebarOpen(false)}>Analytics</Link></li>
+              </ul>
+            </nav>
+            <DarkModeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
+          </header>
+
+          <main>
+            <Routes>
+              <Route path="/" element={<HomePage toggleDarkMode={toggleDarkMode} darkMode={darkMode} />} />
+              <Route path="/features" element={<Features />} />
+              <Route path="/feedback" element={<Feedback />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/courses" element={<Courses />} />
+              <Route path="/analytics" element={<Analytics />} />
+            </Routes>
+          </main>
+        </div>
       </Router>
     </SessionProvider>
   );
