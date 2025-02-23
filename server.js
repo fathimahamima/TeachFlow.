@@ -42,6 +42,9 @@ app.use("/feedback", feedbackRoutes);
 app.use("/leaderboard", leaderboardRoutes);
 app.use("/ai", aiRoutes);
 app.use("/tracking", trackingRoutes);  // 🔹 Use Tracking Route
+app.get("/", (req, res) => {
+  res.send("TeachFlow Backend is Running!");
+});
 
 // Start Server
 app.listen(PORT, () => {
