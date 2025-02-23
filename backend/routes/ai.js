@@ -13,5 +13,7 @@ router.post("/recommend", (req, res) => {
   const recommendation = courses.sort((a, b) => b.score - a.score)[0];
   res.json({ recommendedCourse: recommendation.name });
 });
-
+router.get("/", (req, res) => {
+  res.json({ message: "AI Route is Working!" });
+});
 module.exports = router;

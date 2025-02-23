@@ -18,5 +18,8 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: "Error retrieving leaderboard", error });
   }
 });
+router.get("/", (req, res) => {
+  res.json({ message: "Leaderboard Route is Working!" });
+});
 
 module.exports = router;

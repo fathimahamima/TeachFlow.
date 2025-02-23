@@ -23,5 +23,8 @@ router.get("/session", (req, res) => {
     res.status(401).json({ message: "Not authenticated" });
   }
 });
+router.get("/", (req, res) => {
+  res.json({ message: "Auth Route is Working!" });
+});
 
 module.exports = router;

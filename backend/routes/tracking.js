@@ -41,5 +41,8 @@ router.get("/:teacherId", async (req, res) => {
     res.status(500).json({ message: "Error retrieving tracking data", error });
   }
 });
+router.get("/", (req, res) => {
+  res.json({ message: "Tracking Route is Working!" });
+});
 
 module.exports = router;

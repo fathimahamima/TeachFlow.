@@ -30,5 +30,8 @@ router.get("/:teacherId", async (req, res) => {
     res.status(500).json({ message: "Error retrieving feedback", error });
   }
 });
+router.get("/", (req, res) => {
+  res.json({ message: "Feedback Route is Working!" });
+});
 
 module.exports = router;
