@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { SessionProvider } from "next-auth/react";
 import { motion } from "framer-motion";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
-import * as tf from "@tensorflow/tfjs";
 import { signIn, signOut, useSession } from "next-auth/react";
+import * as tf from "@tensorflow/tfjs";
 
 function HomePage({ toggleDarkMode, darkMode }) {
   const { data: session } = useSession();
+  
   return (
     <div className={`min-h-screen flex flex-col items-center justify-center p-6 transition-all duration-300 ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-800'}`}>
       <motion.h1
@@ -24,6 +25,16 @@ function HomePage({ toggleDarkMode, darkMode }) {
         <Link to="/features">
           <button className="px-6 py-3 text-lg bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all">
             Explore Features
+          </button>
+        </Link>
+        <Link to="/feedback">
+          <button className="px-6 py-3 text-lg bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition-all">
+            Student Feedback
+          </button>
+        </Link>
+        <Link to="/leaderboard">
+          <button className="px-6 py-3 text-lg bg-yellow-600 text-white rounded-lg shadow-md hover:bg-yellow-700 transition-all">
+            Leaderboard
           </button>
         </Link>
         <button onClick={toggleDarkMode} className="px-6 py-3 text-lg bg-gray-700 text-white rounded-lg shadow-md hover:bg-gray-800 transition-all">
@@ -70,7 +81,6 @@ function FeaturesPage({ toggleDarkMode, darkMode }) {
         <li>🎮 Gamification for Professional Growth</li>
         <li>🏆 Leaderboard & Performance Metrics</li>
         <li>📈 Implementation Tracking in Classroom</li>
-        <li>🎥 Post-Training Tutorials & Best Practices</li>
         <li>📝 Student Performance Monitoring & Reports</li>
         <li>📊 Insights & Performance Analysis</li>
         <li>📱 Mobile-Friendly Access</li>
@@ -86,14 +96,6 @@ function FeaturesPage({ toggleDarkMode, darkMode }) {
           <p className="mt-4 text-lg text-blue-400">Recommended: {trainingRecommendation}</p>
         )}
       </div>
-      <button onClick={toggleDarkMode} className="mt-6 px-6 py-3 text-lg bg-gray-700 text-white rounded-lg shadow-md hover:bg-gray-800 transition-all">
-        {darkMode ? 'Light Mode' : 'Dark Mode'}
-      </button>
-      <Link to="/">
-        <button className="mt-6 px-6 py-3 text-lg bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition-all">
-          Back to Home
-        </button>
-      </Link>
     </div>
   );
 }
@@ -106,11 +108,13 @@ export default function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePage toggleDarkMode={toggleDarkMode} darkMode={darkMode} />} />
-        <Route path="/features" element={<FeaturesPage toggleDarkMode={toggleDarkMode} darkMode={darkMode} />} />
-      </Routes>
-    </Router>
+    <SessionProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage toggleDarkMode={toggleDarkMode} darkMode={darkMode} />} />
+          <Route path="/features" element={<FeaturesPage toggleDarkMode={toggleDarkMode} darkMode={darkMode} />} />
+        </Routes>
+      </Router>
+    </SessionProvider>
   );
 }
