@@ -1,9 +1,16 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { SessionProvider } from "next-auth/react";
 import { motion } from "framer-motion";
 import { signIn, signOut, useSession } from "next-auth/react";
 import * as tf from "@tensorflow/tfjs";
-import Link from "next/link";
+import { Link } from "react-router-dom";  // ✅ Correct for React
+
+
+import Features from "./routes/Features";
+import Feedback from "./routes/Feedback";
+import Leaderboard from "./routes/Leaderboard";
+
 
 function HomePage({ toggleDarkMode, darkMode }) {
   const { data: session } = useSession();
@@ -22,17 +29,17 @@ function HomePage({ toggleDarkMode, darkMode }) {
         AI-powered Teacher Professional Development platform with gamification, analytics, and interactive learning experiences.
       </p>
       <div className="mt-6 flex gap-4">
-        <Link href="/features">
+        <Link to="/features">
           <button className="px-6 py-3 text-lg bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all">
             Explore Features
           </button>
         </Link>
-        <Link href="/feedback">
+        <Link to="/feedback">
           <button className="px-6 py-3 text-lg bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition-all">
             Student Feedback
           </button>
         </Link>
-        <Link href="/leaderboard">
+        <Link to="/leaderboard">
           <button className="px-6 py-3 text-lg bg-yellow-600 text-white rounded-lg shadow-md hover:bg-yellow-700 transition-all">
             Leaderboard
           </button>
@@ -63,7 +70,14 @@ export default function App() {
 
   return (
     <SessionProvider>
-      <HomePage toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage toggleDarkMode={toggleDarkMode} darkMode={darkMode} />} />
+          <Route path="/features" element={<Features />} />
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+        </Routes>
+      </Router>
     </SessionProvider>
   );
 }
