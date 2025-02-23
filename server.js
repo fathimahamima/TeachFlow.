@@ -30,11 +30,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Import Routes
-const authRoutes = require("./routes/auth");
-const feedbackRoutes = require("./routes/feedback");
-const leaderboardRoutes = require("./routes/leaderboard");
-const aiRoutes = require("./routes/ai");
-const trackingRoutes = require("./routes/tracking");  // 🔹 Import Tracking Route
+const authRoutes = require("./backend/routes/auth");
+const feedbackRoutes = require("./backend/routes/feedback");
+const leaderboardRoutes = require("./backend/routes/leaderboard");
+const aiRoutes = require("./backend/routes/ai");
+const trackingRoutes = require("./backend/routes/tracking");  // 🔹 Import Tracking Route
 
 // Use Routes
 app.use("/auth", authRoutes);
@@ -44,4 +44,10 @@ app.use("/ai", aiRoutes);
 app.use("/tracking", trackingRoutes);  // 🔹 Use Tracking Route
 
 // Start Server
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  }).on('error', (err) => {
+    console.error('Server error:', err);
+  });
+  
+  
